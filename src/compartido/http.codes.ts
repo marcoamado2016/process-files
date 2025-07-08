@@ -1,0 +1,7 @@
+export enum HTTP_CODES {
+    OK = 200,
+    INTERNAL_ERROR = 500,
+    CREATED = 201,
+    FORBIDDEN = 403,
+    UNAUTHORIZED = 401
+}
