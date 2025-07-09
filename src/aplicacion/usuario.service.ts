@@ -8,7 +8,7 @@ import Usuario, { ISchemaUsuario, IUsuario } from "../dominio/schema/usuario";
 import { Respuesta } from "../dominio/entidad/respuesta";
 import { BaseError } from "../compartido/base-error";
 import { HTTP_CODES } from "../compartido/http.codes";
-import { Validator } from "../compartido/validaro.error";
+import { Validator } from "../compartido/validar.error";
 @injectable()
 export class UsuarioServise {
   constructor(
