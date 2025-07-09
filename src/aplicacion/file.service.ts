@@ -7,8 +7,7 @@ import readline from "readline";
 import File, { IFileSchemma } from "../dominio/schema/file";
 import { Status } from "../dominio/enum/status";
 import { v4 as uuidv4 } from "uuid";
-import { Worker } from "worker_threads";
-import path from "path";
+import { BaseError } from "../compartido/base-error";
 @injectable()
 export class FileService {
   constructor(
@@ -53,8 +52,8 @@ export class FileService {
         respuesta = await this._filesRepositorio.processFile(newFile);
         if (respuesta) return respuesta;
       }
-    } catch (error) {
-      throw new Error(error as string);
+    } catch (error: any) {
+      throw new BaseError(error.httpCode, error.message);
     }
   }
   async totalWord(filePath: string) {
@@ -73,23 +72,24 @@ export class FileService {
   }
   async ProcessStop(process_id: string) {
     try {
-      return await this._filesRepositorio.ProcessStop(process_id);
-    } catch (error) {
-      throw new Error(error as string);
+      const process = await this._filesRepositorio.Process(process_id);
+      return this._filesRepositorio.updateProcess(process);
+    } catch (error: any) {
+      throw new BaseError(error.httpCode, error.message);
     }
   }
   async ProcessStatus(process_id: string) {
     try {
-      return await this._filesRepositorio.ProcessStatus(process_id);
-    } catch (error) {
-      throw new Error(error as string);
+      return await this._filesRepositorio.Process(process_id);
+    } catch (error: any) {
+      throw new BaseError(error.httpCode, error.message);
     }
   }
   async ProcessList() {
     try {
       return await this._filesRepositorio.ProcessList();
-    } catch (error) {
-      throw new Error(error as string);
+    } catch (error: any) {
+      throw new BaseError(error.httpCode, error.message);
     }
   }
 }

@@ -37,10 +37,10 @@ Este proyecto es un **Sistema de Procesamiento de Documentos** que permite carga
 
 ---
 
-## 📦 Instalación
+## Instalación
 
 1. Clonar el repositorio:
 
 ```bash
-git clone <URL-del-repo>
+git clone https://github.com/marcoamado2016/process-files.git
 ```
