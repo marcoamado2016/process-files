@@ -9,7 +9,7 @@ export const crearUsuarioController = async (req: Request, res: Response) => {
     const respuesta = await _usuario.crearUsuarioService(req.body);
     res.status(HTTP_CODES.CREATED).send(respuesta);
   } catch (error: any) {
-    res.status(HTTP_CODES.INTERNAL_ERROR).json({ error: error.message });
+    res.status(error.httpCode).json({ error: error.message });
   }
 };
 
@@ -18,6 +18,6 @@ export const loginController = async (req: Request, res: Response) => {
     const respuesta = await _usuario.loginService(req.body);
     res.status(HTTP_CODES.CREATED).send(respuesta);
   } catch (error: any) {
-    res.status(HTTP_CODES.INTERNAL_ERROR).json({ error: error.message });
+    res.status(error.httpCode).json({ error: error.message });
   }
 };

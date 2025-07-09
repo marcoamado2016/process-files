@@ -6,13 +6,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Usuario, { ISchemaUsuario, IUsuario } from "../dominio/schema/usuario";
 import { Respuesta } from "../dominio/entidad/respuesta";
+import { BaseError } from "../compartido/base-error";
+import { HTTP_CODES } from "../compartido/http.codes";
+import { Validator } from "../compartido/validaro.error";
 @injectable()
 export class UsuarioServise {
   constructor(
     @inject(TYPES.UsuarioRepositorio)
     private usuarioRepositorio: IUsuarioRepositorio
   ) {}
-  async crearUsuarioService(usuarioEntity: ISchemaUsuario) {
+  async crearUsuarioService(usuarioEntity: UsuarioEntity) {
+    if (usuarioEntity) await Validator.validar(usuarioEntity, UsuarioEntity);
     let { password, usuario } = usuarioEntity;
     password = await bcrypt.hash(password, 10);
     const newUsuario: IUsuario = new Usuario({
@@ -24,6 +28,7 @@ export class UsuarioServise {
     return await this.usuarioRepositorio.crearUsuarioRepositorio(newUsuario);
   }
   async loginService(usuarioParams?: UsuarioEntity) {
+    if (usuarioParams) await Validator.validar(usuarioParams, UsuarioEntity);
     const secret = process.env.SECRET_KEY;
     if (!secret) {
       throw new Error("SECRET_KEY no definida en variables de entorno");
@@ -31,12 +36,20 @@ export class UsuarioServise {
     if (usuarioParams?.usuario) {
       let { password, usuario } = usuarioParams;
       const usuarioFind = await this.usuarioRepositorio.findUsuario(usuario);
-      if (!usuarioFind) throw new Error("No se encontro el usuario registrado");
+      if (!usuarioFind)
+        throw new BaseError(
+          HTTP_CODES.NOT_FOUND,
+          "No se encontro el usuario registrado"
+        );
       const usuarioLogin = await bcrypt.compare(
         password,
         usuarioFind.data.password
       );
-      if (!usuarioLogin) throw new Error("Usuario y/o contraseña no valida");
+      if (!usuarioLogin)
+        throw new BaseError(
+          HTTP_CODES.NOT_FOUND,
+          "Usuario y/o contraseña no valida"
+        );
       const token = await jwt.sign(
         { id: usuarioFind.data._id, usuario: usuarioFind.data.usuario },
         secret,
