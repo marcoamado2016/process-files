@@ -6,8 +6,8 @@ import { Respuesta } from "../entidad/respuesta";
 export class FilesRepositorio implements IFileRespositorio {
   async processFile(newFile: IFileSchemma) {
     try {
-      await newFile.save();
-      return new Respuesta("EL archivo se proceso", []);
+      const respuesta = await newFile.save();
+      return new Respuesta("EL archivo se proceso", respuesta);
     } catch (error) {
       throw new Error("Error al guardar el archivo " + error);
     }

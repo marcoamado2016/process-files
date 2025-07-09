@@ -7,6 +7,8 @@ import readline from "readline";
 import File, { IFileSchemma } from "../dominio/schema/file";
 import { Status } from "../dominio/enum/status";
 import { v4 as uuidv4 } from "uuid";
+import { Worker } from "worker_threads";
+import path from "path";
 @injectable()
 export class FileService {
   constructor(
@@ -24,9 +26,11 @@ export class FileService {
         });
         let wordCount: number = 0;
         let lineCount: number = 0;
+        let charCount: number = 0;
         for await (const line of rl) {
           lineCount = lineCount + 1;
           wordCount += line.trim().split(/\s+/).filter(Boolean).length;
+          charCount += line.length;
         }
         const totalWord = await this.totalWord(filePath);
         const newFile: IFileSchemma = new File({
@@ -42,6 +46,8 @@ export class FileService {
           results: {
             total_words: wordCount,
             total_lines: lineCount,
+            total_charts: charCount,
+            files_processed: [req.file?.originalname],
           },
         });
         respuesta = await this._filesRepositorio.processFile(newFile);

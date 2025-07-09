@@ -12,8 +12,9 @@ export interface IFileSchemma extends Document {
   results: {
     total_words: number;
     total_lines: number;
+    total_charts: number;
     most_frequent_words: string[];
-    files_processed: string[];
+    files_processed: [{ type: String; required: true }];
   };
 }
 
@@ -31,6 +32,8 @@ const FileSchema: Schema = new Schema(
     results: {
       total_words: { type: Number, required: true },
       total_lines: { type: Number, required: true },
+      total_charts: { type: Number, required: true },
+      files_processed: [{ type: String, required: true }],
     },
   },
   {
