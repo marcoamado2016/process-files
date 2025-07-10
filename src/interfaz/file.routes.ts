@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   FilesController,
   ProcessListController,
+  ProcessResultsController,
   ProcessStatusController,
   ProcessStopController,
 } from "../infrastructura/controllers/process-files.controllers";
@@ -142,7 +143,7 @@ rutas.post(
 );
 /**
  * @openapi
- * /process/status/{process_id}:
+ * /process/results/{process_id}:
  *  get:
  *    summary: Obtener el estado del proceso de un archivo
  *    tags:
@@ -166,26 +167,27 @@ rutas.post(
  *        description: Error al obtener el estado del proceso
  */
 rutas.get(
-  "/process/status/:process_id",
+  "/process/results/:process_id",
   middlewareVerifyToken,
-  ProcessStatusController
+  ProcessResultsController
 );
 /**
  * @openapi
  * /process/list:
  *  get:
- *    summary: Obtener los procesos de los archivos con sus estados
+ *    summary: Obtener el resultado  del archivo
  *    tags:
  *      - Procesos
  *    security:
  *      - bearerAuth: []
  *    responses:
  *      200:
- *        description: Estado del proceso obtenido correctamente
+ *        description: Obtener el resultado  del archivo
  *      404:
  *        description: Proceso no encontrado
  *      400:
  *        description: Error al obtener el estado del proceso
  */
 rutas.get("/process/list", middlewareVerifyToken, ProcessListController);
+rutas.get("/process/status/:process_id", middlewareVerifyToken, ProcessStatusController);
 export default rutas;

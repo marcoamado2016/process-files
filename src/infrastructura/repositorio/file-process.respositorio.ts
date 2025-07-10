@@ -1,9 +1,8 @@
-import { Respuesta } from "../../dominio/entidad/respuesta";
-import { IFileSchemma } from "../../dominio/schema/file";
 
+import { IFileSchemma } from "../../dominio/schema/file";
 export interface IFileRespositorio {
-  processFile(newFile: IFileSchemma): Promise<Respuesta>;
-  Process(process_id: string): Promise<IFileSchemma>;
-  ProcessList(): Promise<IFileSchemma[]>;
-  updateProcess(process: IFileSchemma): Promise<IFileSchemma>;
+  processFileRepository(newFile: IFileSchemma): Promise<IFileSchemma>;
+  ProcessRepository(process_id: string): Promise<IFileSchemma>;
+  ProcessListRepository(): Promise<IFileSchemma[]>;
+  updateProcessRepository(process: IFileSchemma): Promise<IFileSchemma>;
 }

@@ -8,12 +8,13 @@ import File, { IFileSchemma } from "../dominio/schema/file";
 import { Status } from "../dominio/enum/status";
 import { v4 as uuidv4 } from "uuid";
 import { BaseError } from "../compartido/base-error";
+import { Respuesta } from "../dominio/entidad/respuesta";
 @injectable()
 export class FileService {
   constructor(
     @inject(TYPES.FilesRepositorio) private _filesRepositorio: IFileRespositorio
   ) {}
-  async processFile(req: Request, res: Response): Promise<any> {
+  async processFileService(req: Request, res: Response): Promise<any> {
     let respuesta;
     try {
       if (req.file) {
@@ -49,8 +50,8 @@ export class FileService {
             files_processed: [req.file?.originalname],
           },
         });
-        respuesta = await this._filesRepositorio.processFile(newFile);
-        if (respuesta) return respuesta;
+        respuesta = await this._filesRepositorio.processFileRepository(newFile);
+        return new Respuesta("EL archivo se proceso", respuesta);
       }
     } catch (error: any) {
       throw new BaseError(error.httpCode, error.message);
@@ -70,24 +71,49 @@ export class FileService {
     }
     return { lineCount, wordCount };
   }
-  async ProcessStop(process_id: string) {
+  async ProcessStopService(process_id: string) {
     try {
-      const process = await this._filesRepositorio.Process(process_id);
-      return this._filesRepositorio.updateProcess(process);
+      const process = await this._filesRepositorio.ProcessRepository(
+        process_id
+      );
+      const respuesta = await this._filesRepositorio.updateProcessRepository(
+        process
+      );
+      return new Respuesta("Proceso detenido", respuesta);
     } catch (error: any) {
       throw new BaseError(error.httpCode, error.message);
     }
   }
-  async ProcessStatus(process_id: string) {
+  async ProcessResultService(process_id: string) {
     try {
-      return await this._filesRepositorio.Process(process_id);
+      const respuesta = await this._filesRepositorio.ProcessRepository(
+        process_id
+      );
+      return new Respuesta("Analisis de resultado ", respuesta);
     } catch (error: any) {
       throw new BaseError(error.httpCode, error.message);
     }
   }
-  async ProcessList() {
+  async ProcessListService() {
     try {
-      return await this._filesRepositorio.ProcessList();
+      const respuesta = await this._filesRepositorio.ProcessListRepository();
+      return new Respuesta(`Listado de procesos de archivos`, respuesta);
+    } catch (error: any) {
+      throw new BaseError(error.httpCode, error.message);
+    }
+  }
+  async ProcessStatusService(process_id: string) {
+    try {
+      const respuesta = await this._filesRepositorio.ProcessRepository(
+        process_id
+      );
+      const {
+        status,
+        results: { files_processed },
+      } = respuesta;
+      return new Respuesta(`El archivo ${files_processed[0]}`, {
+        status: status,
+      });
     } catch (error: any) {
       throw new BaseError(error.httpCode, error.message);
     }

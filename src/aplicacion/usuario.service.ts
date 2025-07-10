@@ -24,7 +24,8 @@ export class UsuarioServise {
       password,
     });
     const respuesta = await this.usuarioRepositorio.findUsuario(usuario);
-    if (respuesta.data) throw new Error("Usuario ya esta registrado");
+    if (respuesta.data)
+      throw new BaseError(HTTP_CODES.NOT_FOUND, "Usuario ya esta registrado");
     return await this.usuarioRepositorio.crearUsuarioRepositorio(newUsuario);
   }
   async loginService(usuarioParams?: UsuarioEntity) {

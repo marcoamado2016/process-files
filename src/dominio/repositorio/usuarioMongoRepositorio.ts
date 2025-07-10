@@ -23,11 +23,6 @@ export class UsuarioMongoRepositorio implements IUsuarioRepositorio {
     } catch (error: any) {
       throw new BaseError(HTTP_CODES.INTERNAL_ERROR, "Internal Server Error");
     }
-    if (usuarioEncontrado)
-      throw new BaseError(
-        HTTP_CODES.NOT_FOUND,
-        "No se puede registrar, por que ya existe"
-      );
     return new Respuesta("Busqueda de usuario ", usuarioEncontrado);
   }
 }
