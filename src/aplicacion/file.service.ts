@@ -14,6 +14,15 @@ export class FileService {
   constructor(
     @inject(TYPES.FilesRepositorio) private _filesRepositorio: IFileRespositorio
   ) {}
+  /**
+   * Este servicio procesa un archivo de texto cargado, leyendo su contenido línea por línea para calcular:
+    Total de líneas,total de palabras y total de caracteres.
+    Luego, genera un registro con los resultados del análisis, asigna un process_id único (UUID) para identificar el proceso, guarda los resultados 
+    en la base de datos y devuelve una respuesta confirmando que el archivo fue procesado correctamente.
+   * @param req.file es el archivo importado
+   * @param res 
+   * @returns El archivo fue procesado correctamente.
+   */
   async processFileService(req: Request, res: Response): Promise<any> {
     let respuesta;
     try {

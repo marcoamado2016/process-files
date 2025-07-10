@@ -16,7 +16,7 @@ export const crearUsuarioController = async (req: Request, res: Response) => {
 export const loginController = async (req: Request, res: Response) => {
   try {
     const respuesta = await _usuario.loginService(req.body);
-    res.status(HTTP_CODES.CREATED).send(respuesta);
+    res.status(HTTP_CODES.OK).send(respuesta);
   } catch (error: any) {
     res.status(error.httpCode).json({ error: error.message });
   }

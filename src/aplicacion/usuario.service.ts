@@ -24,9 +24,11 @@ export class UsuarioServise {
       password,
     });
     const respuesta = await this.usuarioRepositorio.findUsuario(usuario);
-    if (respuesta.data)
+    if (respuesta)
       throw new BaseError(HTTP_CODES.NOT_FOUND, "Usuario ya esta registrado");
-    return await this.usuarioRepositorio.crearUsuarioRepositorio(newUsuario);
+    const respuestaCrearUsuario =
+      await this.usuarioRepositorio.crearUsuarioRepositorio(newUsuario);
+    return new Respuesta("Usuario creado ", respuestaCrearUsuario);
   }
   async loginService(usuarioParams?: UsuarioEntity) {
     if (usuarioParams) await Validator.validar(usuarioParams, UsuarioEntity);
@@ -42,17 +44,14 @@ export class UsuarioServise {
           HTTP_CODES.NOT_FOUND,
           "No se encontro el usuario registrado"
         );
-      const usuarioLogin = await bcrypt.compare(
-        password,
-        usuarioFind.data.password
-      );
+      const usuarioLogin = await bcrypt.compare(password, usuarioFind.password);
       if (!usuarioLogin)
         throw new BaseError(
           HTTP_CODES.NOT_FOUND,
           "Usuario y/o contraseña no valida"
         );
       const token = await jwt.sign(
-        { id: usuarioFind.data._id, usuario: usuarioFind.data.usuario },
+        { id: usuarioFind._id, usuario: usuarioFind.usuario },
         secret,
         { expiresIn: "1h" }
       );

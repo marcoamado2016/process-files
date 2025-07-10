@@ -7,22 +7,22 @@ import Usuario, { ISchemaUsuario } from "../schema/usuario";
 export class UsuarioMongoRepositorio implements IUsuarioRepositorio {
   async crearUsuarioRepositorio(
     newUsuario: ISchemaUsuario
-  ): Promise<Respuesta> {
+  ): Promise<ISchemaUsuario> {
     try {
       const usuarioSave = await newUsuario.save();
       const usuario = usuarioSave.toObject();
-      return new Respuesta("Usuario creado OK", usuario);
+      return usuario;
     } catch (error) {
       throw new BaseError(HTTP_CODES.INTERNAL_ERROR, "Internal Server Error");
     }
   }
-  async findUsuario(usuario: string): Promise<Respuesta> {
+  async findUsuario(usuario: string): Promise<ISchemaUsuario> {
     let usuarioEncontrado;
     try {
       usuarioEncontrado = await Usuario.findOne({ usuario });
     } catch (error: any) {
       throw new BaseError(HTTP_CODES.INTERNAL_ERROR, "Internal Server Error");
     }
-    return new Respuesta("Busqueda de usuario ", usuarioEncontrado);
+    return usuarioEncontrado;
   }
 }

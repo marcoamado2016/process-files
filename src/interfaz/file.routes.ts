@@ -154,7 +154,7 @@ rutas.post(
  *      - in: path
  *        name: process_id
  *        required: true
- *        example: 0a2c79d2-c660-4555-a8d9-d839264dc4d7
+ *        example: 08dae850-cc67-4b76-a2b2-a1da30352b2d
  *        schema:
  *          type: string
  *        description: ID del proceso a consultar
@@ -189,5 +189,26 @@ rutas.get(
  *        description: Error al obtener el estado del proceso
  */
 rutas.get("/process/list", middlewareVerifyToken, ProcessListController);
+/**
+ * @openapi
+ * /process/status/{process_id}:
+ *  get:
+ *    summary: Obtener el estado del proceso seleccionado
+ *    tags:
+ *      - Procesos
+ *    security:
+ *    parameters:
+ *      - in: path
+ *        name: process_id
+ *        requerid: true
+ *        example: 0a2c79d2-c660-4555-a8d9-d839264dc4d7
+ *        schema:
+ *          type: string
+ *        descripcion: ID del proceso a consultar
+ *    responses:
+ *      200:
+ *        description: El archivo tiene el siguiente estado
+ * 
+ */
 rutas.get("/process/status/:process_id", middlewareVerifyToken, ProcessStatusController);
 export default rutas;
