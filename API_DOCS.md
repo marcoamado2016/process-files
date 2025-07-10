@@ -54,3 +54,4 @@ Dentro del archivo agregar estas credenciales
 ```bash
 git clone https://github.com/marcoamado2016/process-files.git
 ```
+2. npm install
